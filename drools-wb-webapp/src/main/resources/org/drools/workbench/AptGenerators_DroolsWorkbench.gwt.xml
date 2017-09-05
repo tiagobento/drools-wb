@@ -1,0 +1,7 @@
+<module>
+
+  	<inherits name="org.drools.workbench.DroolsWorkbench" />
+
+  	<set-property name="errai.useAptGenerators" value="true" />
+  	
+</module>

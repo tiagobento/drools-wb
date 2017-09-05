@@ -17,6 +17,8 @@ package org.drools.workbench.client;
 
 import javax.inject.Inject;
 
+import org.jboss.errai.common.apt.ErraiApp;
+
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.common.services.project.preferences.scope.GlobalPreferenceScope;
 import org.guvnor.common.services.shared.config.AppConfigService;
@@ -34,6 +36,7 @@ import org.uberfire.ext.preferences.client.admin.page.AdminPage;
 import org.uberfire.workbench.model.menu.MenuFactory;
 import org.uberfire.workbench.model.menu.Menus;
 
+@ErraiApp
 @EntryPoint
 public class DroolsWorkbenchEntryPoint extends DefaultWorkbenchEntryPoint {
 
