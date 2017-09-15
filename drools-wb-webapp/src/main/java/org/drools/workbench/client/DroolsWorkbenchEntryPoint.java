@@ -17,7 +17,7 @@ package org.drools.workbench.client;
 
 import javax.inject.Inject;
 
-import org.jboss.errai.common.apt.ErraiApp;
+import org.jboss.errai.common.configuration.ErraiApp;
 
 import org.drools.workbench.client.resources.i18n.AppConstants;
 import org.guvnor.common.services.project.preferences.scope.GlobalPreferenceScope;
