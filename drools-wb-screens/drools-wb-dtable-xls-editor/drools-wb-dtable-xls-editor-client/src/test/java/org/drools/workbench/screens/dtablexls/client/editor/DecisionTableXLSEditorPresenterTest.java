@@ -275,14 +275,14 @@ public class DecisionTableXLSEditorPresenterTest {
         }
 
         @Override
-        public DecisionTableXLSService call(RemoteCallback<?> remoteCallback) {
+        public <S> DecisionTableXLSService call(RemoteCallback<S> remoteCallback) {
             return call(remoteCallback,
                         null);
         }
 
         @Override
-        public DecisionTableXLSService call(RemoteCallback<?> remoteCallback,
-                                            ErrorCallback<?> errorCallback) {
+        public <S, E> DecisionTableXLSService call(RemoteCallback<S> remoteCallback,
+                                            ErrorCallback<E> errorCallback) {
             this.remoteCallback = remoteCallback;
             return decisionTableXLSService;
         }
