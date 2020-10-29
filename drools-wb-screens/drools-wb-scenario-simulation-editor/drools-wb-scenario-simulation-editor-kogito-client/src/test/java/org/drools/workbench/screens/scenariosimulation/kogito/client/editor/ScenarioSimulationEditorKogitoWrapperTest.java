@@ -329,7 +329,11 @@ public class ScenarioSimulationEditorKogitoWrapperTest {
 
     @Test
     public void onStartup() throws IllegalAccessException, NoSuchFieldException {
+<<<<<<< HEAD
         final Field field = MultiPageEditorContainerPresenter.class.getDeclaredField("multiPageEditorContainerView");
+=======
+        final Field field = scenarioSimulationEditorKogitoWrapperSpy.getClass().getDeclaredField("multiPageEditorContainerView");
+>>>>>>> e0c6875dd... Fix tests compilation
         field.setAccessible(true);
         field.set(scenarioSimulationEditorKogitoWrapperSpy, multiPageEditorContainerViewMock);
 
