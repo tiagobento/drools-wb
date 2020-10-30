@@ -261,12 +261,6 @@ public class DMNScenarioValidationTest extends AbstractScenarioValidationTest {
         return dmnTypeMock;
     }
 
-    private DMNType initDMNType(BuiltInType type) {
-        BaseDMNTypeImpl dmnTypeMock = mock(BaseDMNTypeImpl.class);
-        when(dmnTypeMock.getFeelType()).thenReturn(type);
-        return dmnTypeMock;
-    }
-
     private String createDMNTypeName(String name) {
         return "t" + name.toUpperCase();
     }
