@@ -256,10 +256,7 @@ public class DecisionTableXLSServiceImplTest {
         }
         verify(ioService, never()).newOutputStream(any(org.uberfire.java.nio.file.Path.class), any(CommentedOption.class));
         verifyStatic(IOUtils.class, never());
-<<<<<<< HEAD
         IOUtils.toByteArray(Mockito.<InputStream>any());
-=======
->>>>>>> e0c6875dd... Fix tests compilation
     }
 
     @Test(expected = DecisionTableParseException.class)
