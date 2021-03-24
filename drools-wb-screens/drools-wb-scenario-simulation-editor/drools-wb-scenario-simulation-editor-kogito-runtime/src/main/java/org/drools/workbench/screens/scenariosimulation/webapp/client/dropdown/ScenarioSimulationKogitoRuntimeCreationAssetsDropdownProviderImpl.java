@@ -15,7 +15,6 @@
  */
 package org.drools.workbench.screens.scenariosimulation.webapp.client.dropdown;
 
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.Consumer;
@@ -24,58 +23,42 @@ import java.util.stream.Collectors;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
+import com.google.gwt.core.client.GWT;
 import org.drools.workbench.screens.scenariosimulation.kogito.client.dropdown.ScenarioSimulationKogitoCreationAssetsDropdownProvider;
+import org.drools.workbench.screens.scenariosimulation.webapp.client.services.TestingVFSService;
 import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
-import org.kie.workbench.common.kogito.webapp.base.client.workarounds.KogitoResourceContentService;
 import org.kie.workbench.common.widgets.client.assets.dropdown.KieAssetsDropdownItem;
-import org.uberfire.client.workbench.widgets.common.ErrorPopupPresenter;
+import org.uberfire.backend.vfs.Path;
+
+import static org.drools.workbench.screens.scenariosimulation.webapp.client.editor.DMNDiagramEditorActivity.DMN_PATH;
 
 @Dependent
 public class ScenarioSimulationKogitoRuntimeCreationAssetsDropdownProviderImpl implements ScenarioSimulationKogitoCreationAssetsDropdownProvider {
 
-    protected static final String DMN_FILE_SEARCH_PATTERN = "**/*.dmn";
-    protected static final String TARGET_FOLDER = "target/";
-    protected static final String TARGET_FOLDER_NOT_ROOT = "/" + TARGET_FOLDER;
-
+    private static final String FILE_SUFFIX = "dmn";
 
     @Inject
-    protected KogitoResourceContentService resourceContentService;
-    @Inject
-    protected ErrorPopupPresenter errorPopupPresenter;
+    private TestingVFSService testingVFSService;
 
     @Override
     public void getItems(Consumer<List<KieAssetsDropdownItem>> assetListConsumer) {
-        resourceContentService.getFilteredItems(DMN_FILE_SEARCH_PATTERN,
-                                                getRemoteCallback(assetListConsumer),
-                                                getErrorCallback());
-    }
-
-    protected RemoteCallback<List<String>> getRemoteCallback(Consumer<List<KieAssetsDropdownItem>> assetListConsumer) {
-        return response -> {
+        getItems(response -> {
             List<KieAssetsDropdownItem> toAccept = response.stream()
-                    .filter(item -> !isInTargetFolder(item))
                     .map(this::getKieAssetsDropdownItem)
-                    .sorted(Comparator.comparing(KieAssetsDropdownItem::getText, String.CASE_INSENSITIVE_ORDER))
                     .collect(Collectors.toList());
             assetListConsumer.accept(toAccept);
-        };
-    }
-
-    protected ErrorCallback<Object> getErrorCallback() {
-        return (message, throwable) -> {
-            errorPopupPresenter.showMessage(message + ": " + throwable.getMessage());
+        }, (message, throwable) -> {
+            GWT.log(message.toString() + " " + message.toString(), throwable);
             return false;
-        };
+        });
     }
 
-    protected KieAssetsDropdownItem getKieAssetsDropdownItem(final String fullPath) {
-        int idx = fullPath.replaceAll("\\\\", "/").lastIndexOf('/');
-        final String fileName = idx >= 0 ? fullPath.substring(idx + 1) : fullPath;
-        return new KieAssetsDropdownItem(fileName, fullPath, fullPath, new HashMap<>());
+    protected void getItems(final RemoteCallback<List<Path>> callback, final ErrorCallback<Object> errorCallback) {
+        testingVFSService.getItemsByPath(DMN_PATH, FILE_SUFFIX, callback, errorCallback);
     }
 
-    private boolean isInTargetFolder(String path) {
-        return path.toLowerCase().startsWith(TARGET_FOLDER) || path.toLowerCase().contains(TARGET_FOLDER_NOT_ROOT);
+    protected KieAssetsDropdownItem getKieAssetsDropdownItem(final Path asset) {
+        return new KieAssetsDropdownItem(asset.getFileName(), "", asset.toURI(), new HashMap<>());
     }
 }

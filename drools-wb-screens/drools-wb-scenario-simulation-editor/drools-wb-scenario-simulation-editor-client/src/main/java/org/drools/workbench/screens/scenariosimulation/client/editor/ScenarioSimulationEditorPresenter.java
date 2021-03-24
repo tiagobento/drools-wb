@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import javax.enterprise.context.Dependent;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 
@@ -49,8 +49,6 @@ import org.drools.workbench.screens.scenariosimulation.client.events.ImportEvent
 import org.drools.workbench.screens.scenariosimulation.client.events.RedoEvent;
 import org.drools.workbench.screens.scenariosimulation.client.events.ScenarioNotificationEvent;
 import org.drools.workbench.screens.scenariosimulation.client.events.UndoEvent;
-import org.drools.workbench.screens.scenariosimulation.client.factories.ScenarioMenuItemFactory;
-import org.drools.workbench.screens.scenariosimulation.client.handlers.AbstractScenarioSimulationDocksHandler;
 import org.drools.workbench.screens.scenariosimulation.client.handlers.ScenarioSimulationHasBusyIndicatorDefaultErrorCallback;
 import org.drools.workbench.screens.scenariosimulation.client.popup.ConfirmPopupPresenter;
 import org.drools.workbench.screens.scenariosimulation.client.popup.CustomBusyPopup;
@@ -68,27 +66,20 @@ import org.drools.workbench.screens.scenariosimulation.model.FactMappingValidati
 import org.drools.workbench.screens.scenariosimulation.model.SimulationRunResult;
 import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
-import org.jboss.errai.enterprise.client.jaxrs.MarshallingWrapper;
-import org.kie.workbench.common.widgets.client.menu.FileMenuBuilder;
 import org.kie.workbench.common.widgets.client.resources.i18n.CommonConstants;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.client.mvp.PlaceStatus;
 import org.uberfire.client.workbench.docks.UberfireDocksInteractionEvent;
 import org.uberfire.ext.editor.commons.client.file.exports.TextContent;
 import org.uberfire.ext.editor.commons.client.file.exports.TextFileExport;
 import org.uberfire.ext.widgets.common.client.common.BusyPopup;
 import org.uberfire.mvp.Command;
-import org.uberfire.mvp.impl.DefaultPlaceRequest;
 import org.uberfire.workbench.events.NotificationEvent;
-import org.uberfire.workbench.model.menu.MenuItem;
 
 import static org.drools.scenariosimulation.api.model.ScenarioSimulationModel.Type;
-import static org.drools.workbench.screens.scenariosimulation.client.handlers.AbstractScenarioSimulationDocksHandler.SCESIMEDITOR_ID;
 import static org.drools.workbench.screens.scenariosimulation.service.ImportExportType.CSV;
 
-@Dependent
+@ApplicationScoped
 public class ScenarioSimulationEditorPresenter {
 
     public static final String IDENTIFIER = "ScenarioSimulationEditor";
@@ -99,24 +90,16 @@ public class ScenarioSimulationEditorPresenter {
     protected EventBus eventBus;
     protected ScenarioGridWidget scenarioMainGridWidget;
     protected ScenarioGridWidget scenarioBackgroundGridWidget;
-    protected PlaceManager placeManager;
     protected DataManagementStrategy dataManagementStrategy;
     protected ScenarioSimulationContext context;
     protected ScenarioSimulationModel model;
     protected long scenarioPresenterId;
-    protected MenuItem undoMenuItem;
-    protected MenuItem redoMenuItem;
-    protected MenuItem runScenarioMenuItem;
-    protected MenuItem exportToCSVMenuItem;
-    protected MenuItem importMenuItem;
-    protected MenuItem downloadMenuItem;
     protected ScenarioSimulationEditorWrapper scenarioSimulationEditorWrapper;
     private ScenarioSimulationResourceType type;
     private ScenarioSimulationView view;
     private Command populateTestToolsCommand;
     private TextFileExport textFileExport;
     private ConfirmPopupPresenter confirmPopupPresenter;
-    private AbstractScenarioSimulationDocksHandler abstractScenarioSimulationDocksHandler;
 
     public ScenarioSimulationEditorPresenter() {
         //Zero-parameter constructor for CDI proxies
@@ -125,19 +108,14 @@ public class ScenarioSimulationEditorPresenter {
     @Inject
     public ScenarioSimulationEditorPresenter(final AbstractScenarioSimulationProducer abstractScenarioSimulationProducer,
                                              final ScenarioSimulationResourceType type,
-                                             final PlaceManager placeManager,
-                                             final AbstractScenarioSimulationDocksHandler abstractScenarioSimulationDocksHandler,
                                              final TextFileExport textFileExport,
                                              final ConfirmPopupPresenter confirmPopupPresenter) {
         this.view = abstractScenarioSimulationProducer.getScenarioSimulationView();
-        this.abstractScenarioSimulationDocksHandler = abstractScenarioSimulationDocksHandler;
         this.type = type;
-        this.placeManager = placeManager;
         this.eventBus = abstractScenarioSimulationProducer.getEventBus();
         this.textFileExport = textFileExport;
         this.confirmPopupPresenter = confirmPopupPresenter;
         view.init();
-        initMenuItems();
         abstractScenarioSimulationProducer.setScenarioSimulationEditorPresenter(this);
         scenarioMainGridWidget = view.getScenarioGridWidget();
         scenarioMainGridWidget.getScenarioSimulationContext().setScenarioSimulationEditorPresenter(this);
@@ -150,14 +128,7 @@ public class ScenarioSimulationEditorPresenter {
 
     public void setWrapper(ScenarioSimulationEditorWrapper scenarioSimulationEditorWrapper) {
         this.scenarioSimulationEditorWrapper = scenarioSimulationEditorWrapper;
-    }
-
-    private void initMenuItems() {
-        undoMenuItem = ScenarioMenuItemFactory.getUndoMenuItem(this::onUndo);
-        redoMenuItem = ScenarioMenuItemFactory.getRedoMenuItem(this::onRedo);
-        runScenarioMenuItem = ScenarioMenuItemFactory.getRunScenarioMenuItem(this::onRunScenario);
-        exportToCSVMenuItem = ScenarioMenuItemFactory.getExportToCsvMenuItem(this::onExportToCsv);
-        importMenuItem = ScenarioMenuItemFactory.getImportMenuItem(this::showImportDialog);
+        this.scenarioSimulationEditorWrapper.addBackgroundPage(scenarioBackgroundGridWidget);
     }
 
     public void setPath(ObservablePath path) {
@@ -180,19 +151,14 @@ public class ScenarioSimulationEditorPresenter {
     /**
      * @param status <code>PlaceStatus</code> of <b>TestToolsPresenter</b>
      */
-    public void showDocks(PlaceStatus status) {
-        abstractScenarioSimulationDocksHandler.addDocks();
-        abstractScenarioSimulationDocksHandler.setScesimEditorId(String.valueOf(scenarioPresenterId));
-        if (!PlaceStatus.OPEN.equals(status)) {
-            expandToolsDock();
-        }
+    public void showDocks() {
+        expandToolsDock();
         registerTestToolsCallback();
         resetDocks();
         populateRightDocks(TestToolsPresenter.IDENTIFIER);
     }
 
     public void hideDocks() {
-        abstractScenarioSimulationDocksHandler.removeDocks();
         scenarioMainGridWidget.clearSelections();
         scenarioBackgroundGridWidget.clearSelections();
         unRegisterTestToolsCallback();
@@ -206,11 +172,9 @@ public class ScenarioSimulationEditorPresenter {
     }
 
     public void expandToolsDock() {
-        abstractScenarioSimulationDocksHandler.expandToolsDock();
     }
 
     public void expandSettingsDock() {
-        abstractScenarioSimulationDocksHandler.expandSettingsDock();
     }
 
     public ScenarioSimulationView getView() {
@@ -232,7 +196,6 @@ public class ScenarioSimulationEditorPresenter {
     public void reloadTestTools(boolean disable) {
         populateRightDocks(TestToolsPresenter.IDENTIFIER);
         if (disable) {
-            abstractScenarioSimulationDocksHandler.getTestToolsPresenter().onDisableEditorTab();
         }
     }
 
@@ -240,7 +203,6 @@ public class ScenarioSimulationEditorPresenter {
      * To be called to force settings panel reload
      */
     public void reloadSettingsDock() {
-        this.updateSettings(abstractScenarioSimulationDocksHandler.getSettingsPresenter());
     }
 
     public void onRunScenario() {
@@ -276,28 +238,6 @@ public class ScenarioSimulationEditorPresenter {
         eventBus.fireEvent(new RedoEvent());
     }
 
-    public void setUndoButtonEnabledStatus(boolean enabled) {
-        undoMenuItem.setEnabled(enabled);
-    }
-
-    public void setRedoButtonEnabledStatus(boolean enabled) {
-        redoMenuItem.setEnabled(enabled);
-    }
-
-    public void setItemMenuEnabled(boolean enabled) {
-        runScenarioMenuItem.setEnabled(enabled);
-        importMenuItem.setEnabled(enabled);
-        exportToCSVMenuItem.setEnabled(enabled);
-        if (downloadMenuItem != null) {
-            downloadMenuItem.setEnabled(enabled);
-        }
-    }
-
-    public void addDownloadMenuItem(FileMenuBuilder fileMenuBuilder, Supplier<Path> pathSupplier) {
-        downloadMenuItem = ScenarioMenuItemFactory.getDownloadMenuItem(() -> onDownload(pathSupplier));
-        fileMenuBuilder.addNewTopLevelMenu(downloadMenuItem);
-    }
-
     public DataManagementStrategy getDataManagementStrategy() {
         return dataManagementStrategy;
     }
@@ -328,7 +268,6 @@ public class ScenarioSimulationEditorPresenter {
      * marked as ApplicationScoped, this method should be call everytime ScenarioSimulationEditor is opened (or closed)
      */
     protected void resetDocks() {
-        abstractScenarioSimulationDocksHandler.resetDocks();
     }
 
     /**
@@ -339,7 +278,7 @@ public class ScenarioSimulationEditorPresenter {
      * is equals to the <b>path</b> (toString) of the current instance; <code>false</code> otherwise
      */
     protected boolean isUberfireDocksInteractionEventToManage(UberfireDocksInteractionEvent uberfireDocksInteractionEvent) {
-        return uberfireDocksInteractionEvent.getTargetDock() != null && uberfireDocksInteractionEvent.getTargetDock().getPlaceRequest().getParameter(SCESIMEDITOR_ID, "").equals(String.valueOf(scenarioPresenterId));
+        return true;
     }
 
     protected RemoteCallback<SimulationRunResult> getRefreshModelCallback() {
@@ -378,7 +317,6 @@ public class ScenarioSimulationEditorPresenter {
         }
 
         dataManagementStrategy.setModel(model);
-        abstractScenarioSimulationDocksHandler.expandTestResultsDock();
         scenarioSimulationEditorWrapper.onRefreshedModelContent(newData);
     }
 
@@ -391,11 +329,9 @@ public class ScenarioSimulationEditorPresenter {
     }
 
     protected void registerTestToolsCallback() {
-        placeManager.registerOnOpenCallback(new DefaultPlaceRequest(TestToolsPresenter.IDENTIFIER), populateTestToolsCommand);
     }
 
     protected void unRegisterTestToolsCallback() {
-        placeManager.getOnOpenCallbacks(new DefaultPlaceRequest(TestToolsPresenter.IDENTIFIER)).remove(populateTestToolsCommand);
     }
 
     protected ErrorCallback<Object> getImportErrorCallback() {
@@ -406,63 +342,30 @@ public class ScenarioSimulationEditorPresenter {
         };
     }
 
-    /**
-     * If you want to customize the menu override this method.
-     * @param fileMenuBuilder
-     */
-    public void makeMenuBar(FileMenuBuilder fileMenuBuilder) {
-        fileMenuBuilder.addValidate(getValidateCommand());
-        fileMenuBuilder.addNewTopLevelMenu(runScenarioMenuItem);
-        fileMenuBuilder.addNewTopLevelMenu(undoMenuItem);
-        fileMenuBuilder.addNewTopLevelMenu(redoMenuItem);
-        fileMenuBuilder.addNewTopLevelMenu(exportToCSVMenuItem);
-        fileMenuBuilder.addNewTopLevelMenu(importMenuItem);
-        undoMenuItem.setEnabled(false);
-        redoMenuItem.setEnabled(false);
-    }
-
-    public void addCommonActions(final FileMenuBuilder fileMenuBuilder, MenuItem versionMenuItem, MenuItem alertsButtonMenuItem) {
-        fileMenuBuilder
-                .addNewTopLevelMenu(versionMenuItem)
-                .addNewTopLevelMenu(alertsButtonMenuItem);
-    }
-
     public void loadContent() {
         CustomBusyPopup.showMessage(CommonConstants.INSTANCE.Loading());
     }
 
     public boolean isDirty() {
-        try {
-            scenarioMainGridWidget.resetErrors();
-            int currentHashcode = MarshallingWrapper.toJSON(model).hashCode();
-            return scenarioSimulationEditorWrapper.getOriginalHash() != currentHashcode;
-        } catch (Exception ignored) {
-            return false;
-        }
+        return false;
     }
 
     public void onEditTabSelected() {
-        setItemMenuEnabled(true);
-        populateRightDocks(TestToolsPresenter.IDENTIFIER);
         scenarioMainGridWidget.selectAndFocus();
         scenarioBackgroundGridWidget.deselectAndUnFocus();
     }
 
     public void onBackgroundTabSelected() {
-        setItemMenuEnabled(true);
-        populateRightDocks(TestToolsPresenter.IDENTIFIER);
         scenarioBackgroundGridWidget.selectAndFocus();
         scenarioMainGridWidget.deselectAndUnFocus();
     }
 
     public void onOverviewSelected() {
-        setItemMenuEnabled(false);
         scenarioMainGridWidget.deselectAndUnFocus();
         scenarioBackgroundGridWidget.deselectAndUnFocus();
     }
 
     public void onImportsTabSelected() {
-        setItemMenuEnabled(false);
         scenarioMainGridWidget.deselectAndUnFocus();
         scenarioBackgroundGridWidget.deselectAndUnFocus();
     }
@@ -597,7 +500,6 @@ public class ScenarioSimulationEditorPresenter {
     public void getModelSuccessCallbackMethod(DataManagementStrategy dataManagementStrategy, ScenarioSimulationModel model) {
         this.dataManagementStrategy = dataManagementStrategy;
         this.model = model;
-        scenarioSimulationEditorWrapper.addBackgroundPage(scenarioBackgroundGridWidget);
         context.getStatus().setSimulation(model.getSimulation());
         context.getStatus().setBackground(model.getBackground());
         scenarioMainGridWidget.setContent(model.getSimulation(), model.getSettings().getType());
@@ -607,9 +509,13 @@ public class ScenarioSimulationEditorPresenter {
         populateRightDocks(SettingsPresenter.IDENTIFIER);
         CustomBusyPopup.close();
         // Selecting and focusing current selected widget after a data model load
+        context.getBackgroundGrid().select();
+
         context.getSelectedScenarioGridWidget().ifPresent(ScenarioGridWidget::selectAndFocus);
         // check if structure is valid
         getValidateCommand().execute();
+        //force tab to be refreshed
+        scenarioMainGridWidget.onResize();
     }
 
     public ScenarioSimulationResourceType getType() {
@@ -624,7 +530,7 @@ public class ScenarioSimulationEditorPresenter {
     }
 
     protected void clearTestToolsStatus() {
-        abstractScenarioSimulationDocksHandler.getTestToolsPresenter().onClearStatus();
+
     }
 
     public void setCheatSheet(CheatSheetView.Presenter presenter) {
@@ -643,7 +549,7 @@ public class ScenarioSimulationEditorPresenter {
     }
 
     public String getJsonModel(ScenarioSimulationModel model) {
-        return MarshallingWrapper.toJSON(model);
+        return "{}";
     }
 
     protected String getFileDownloadURL(final Supplier<Path> pathSupplier) {

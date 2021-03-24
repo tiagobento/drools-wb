@@ -34,16 +34,12 @@ import org.drools.workbench.screens.scenariosimulation.client.events.UpdateSetti
 import org.drools.workbench.screens.scenariosimulation.client.events.ValidateSimulationEvent;
 import org.drools.workbench.screens.scenariosimulation.client.resources.i18n.ScenarioSimulationEditorConstants;
 import org.kie.workbench.common.widgets.client.assets.dropdown.KieAssetsDropdownItem;
-import org.uberfire.client.annotations.WorkbenchScreen;
 import org.uberfire.mvp.Command;
 
 import static org.drools.scenariosimulation.api.model.ScenarioSimulationModel.Type.DMN;
 import static org.drools.scenariosimulation.api.model.ScenarioSimulationModel.Type.RULE;
-import static org.drools.workbench.screens.scenariosimulation.client.rightpanel.SettingsPresenter.DEFAULT_PREFERRED_WIDHT;
-import static org.drools.workbench.screens.scenariosimulation.client.rightpanel.SettingsPresenter.IDENTIFIER;
 
 @ApplicationScoped
-@WorkbenchScreen(identifier = IDENTIFIER, preferredWidth = DEFAULT_PREFERRED_WIDHT)
 public class SettingsPresenter extends AbstractSubDockPresenter<SettingsView> implements SettingsView.Presenter {
 
     public static final int DEFAULT_PREFERRED_WIDHT = 300;

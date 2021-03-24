@@ -22,9 +22,6 @@ import javax.annotation.PostConstruct;
 
 import com.google.gwt.user.client.ui.Widget;
 import org.uberfire.backend.vfs.ObservablePath;
-import org.uberfire.client.annotations.DefaultPosition;
-import org.uberfire.client.annotations.WorkbenchPartTitle;
-import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.workbench.model.CompassPosition;
 import org.uberfire.workbench.model.Position;
 
@@ -49,17 +46,14 @@ public abstract class AbstractSubDockPresenter<T extends SubDockView> implements
         view.init(this);
     }
 
-    @DefaultPosition
     public Position getDefaultPosition() {
         return CompassPosition.EAST;
     }
 
-    @WorkbenchPartTitle
     public String getTitle() {
         return title;
     }
 
-    @WorkbenchPartView
     public Widget asWidget() {
         return view.asWidget();
     }

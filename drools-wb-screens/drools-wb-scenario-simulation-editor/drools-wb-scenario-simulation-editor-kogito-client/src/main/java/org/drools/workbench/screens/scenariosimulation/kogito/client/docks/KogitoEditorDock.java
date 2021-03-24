@@ -15,46 +15,29 @@
  */
 package org.drools.workbench.screens.scenariosimulation.kogito.client.docks;
 
-import java.util.Collection;
-import java.util.Objects;
-
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.GWT;
-import org.jboss.errai.ioc.client.api.ManagedInstance;
 import org.kie.workbench.common.widgets.client.docks.AuthoringEditorDock;
-import org.kie.workbench.common.widgets.client.docks.WorkbenchDocksHandler;
 import org.uberfire.client.workbench.docks.UberfireDock;
-import org.uberfire.client.workbench.docks.UberfireDockPosition;
 import org.uberfire.client.workbench.docks.UberfireDocks;
-import org.uberfire.mvp.Command;
 import org.uberfire.mvp.PlaceRequest;
 
 @ApplicationScoped
 public class KogitoEditorDock implements AuthoringEditorDock {
 
     protected UberfireDocks uberfireDocks;
-    protected ManagedInstance<WorkbenchDocksHandler> installedHandlers;
     protected String authoringPerspectiveIdentifier = null;
-    protected WorkbenchDocksHandler activeHandler = null;
     protected UberfireDock[] activeDocks;
 
     @Inject
-    public KogitoEditorDock(final UberfireDocks uberfireDocks,
-                            final ManagedInstance<WorkbenchDocksHandler> installedHandlers) {
+    public KogitoEditorDock(final UberfireDocks uberfireDocks) {
         this.uberfireDocks = uberfireDocks;
-        this.installedHandlers = installedHandlers;
     }
 
     @PostConstruct
     public void initialize() {
-        // Initializing the handlers
-        installedHandlers.iterator().forEachRemaining(handler -> {
-            Command initCommand = () -> setActiveHandler(handler);
-            handler.init(initCommand);
-        });
     }
 
     @Override
@@ -69,47 +52,14 @@ public class KogitoEditorDock implements AuthoringEditorDock {
 
     @Override
     public void show() {
-        GWT.log(this + " show");
     }
 
     @Override
     public void hide() {
-        GWT.log(this + " hide");
     }
 
     @Override
     public void expandAuthoringDock(UberfireDock dockToOpen) {
-        uberfireDocks.show(UberfireDockPosition.EAST, authoringPerspectiveIdentifier);
-        if (dockToOpen != null) {
-            uberfireDocks.open(dockToOpen);
-        }
     }
 
-    protected void setActiveHandler(WorkbenchDocksHandler handler) {
-        // If there's an active handler let's check if it should refresh docks
-        if (Objects.equals(activeHandler, handler) && !activeHandler.shouldRefreshDocks()) {
-            return;
-        }
-
-        // setting the new handler as active
-        activeHandler = handler;
-
-        if (activeHandler.shouldDisableDocks()) {
-            // disable docks
-            uberfireDocks.hide(UberfireDockPosition.EAST,
-                               authoringPerspectiveIdentifier);
-        } else {
-            // first remove the existing docks
-            if (activeDocks != null) {
-                uberfireDocks.remove(activeDocks);
-            }
-
-            // getting docks from the handler and  refreshing
-            Collection<UberfireDock> docks = activeHandler.provideDocks(authoringPerspectiveIdentifier);
-            activeDocks = docks.toArray(new UberfireDock[docks.size()]);
-            uberfireDocks.add(activeDocks);
-            uberfireDocks.show(UberfireDockPosition.EAST,
-                               authoringPerspectiveIdentifier);
-        }
-    }
 }

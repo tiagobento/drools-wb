@@ -20,19 +20,24 @@ import javax.inject.Inject;
 import org.drools.workbench.screens.scenariosimulation.kogito.client.services.ScenarioSimulationKogitoResourceContentService;
 import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
-import org.kie.workbench.common.kogito.webapp.base.client.workarounds.KogitoResourceContentService;
 import org.uberfire.backend.vfs.Path;
 
 public class ScenarioSimulationKogitoRuntimeResourceContentService implements ScenarioSimulationKogitoResourceContentService {
 
     @Inject
-    private KogitoResourceContentService resourceContentService;
+    private VFSServiceFake vfsServiceFake;
 
     @Override
     public void getFileContent(final Path path,
                                final RemoteCallback<String> remoteCallback,
                                final ErrorCallback<Object> errorCallback) {
-        resourceContentService.loadFile(path.toURI(), remoteCallback, errorCallback);
+        String result = vfsServiceFake.readAllString(path);
+        if(result == null && result.isEmpty()) {
+            String error = "Unable to open file: " + path;
+            errorCallback.error(error, new Exception(error));
+        } else {
+            remoteCallback.callback(result);
+        }
     }
 
 }

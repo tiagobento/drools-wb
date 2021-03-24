@@ -18,10 +18,8 @@ package org.drools.workbench.screens.scenariosimulation.service;
 import org.drools.scenariosimulation.api.model.Settings;
 import org.drools.workbench.screens.scenariosimulation.model.DMNMetadata;
 import org.drools.workbench.screens.scenariosimulation.model.typedescriptor.FactModelTuple;
-import org.jboss.errai.bus.server.annotations.Remote;
 import org.uberfire.backend.vfs.Path;
 
-@Remote
 public interface DMNTypeService {
 
     /**

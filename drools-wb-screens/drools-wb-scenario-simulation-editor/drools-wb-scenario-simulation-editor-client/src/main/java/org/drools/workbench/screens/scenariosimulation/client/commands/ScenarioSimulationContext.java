@@ -219,11 +219,11 @@ public class ScenarioSimulationContext {
     }
 
     public void setUndoButtonEnabledStatus(boolean enabled) {
-        scenarioSimulationEditorPresenter.setUndoButtonEnabledStatus(enabled);
+        //scenarioSimulationEditorPresenter.setUndoButtonEnabledStatus(enabled);
     }
 
     public void setRedoButtonEnabledStatus(boolean enabled) {
-        scenarioSimulationEditorPresenter.setRedoButtonEnabledStatus(enabled);
+        //scenarioSimulationEditorPresenter.setRedoButtonEnabledStatus(enabled);
     }
 
     /**

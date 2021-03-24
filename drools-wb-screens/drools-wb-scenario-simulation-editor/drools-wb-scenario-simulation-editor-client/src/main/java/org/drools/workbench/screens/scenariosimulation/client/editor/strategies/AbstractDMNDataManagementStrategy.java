@@ -24,12 +24,9 @@ import org.drools.workbench.screens.scenariosimulation.client.events.Unsupported
 import org.drools.workbench.screens.scenariosimulation.client.rightpanel.TestToolsView;
 import org.drools.workbench.screens.scenariosimulation.model.ScenarioSimulationModelContent;
 import org.drools.workbench.screens.scenariosimulation.model.typedescriptor.FactModelTuple;
-import org.jboss.errai.bus.client.api.messaging.Message;
-import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.uberfire.backend.vfs.ObservablePath;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.ext.widgets.common.client.common.popups.errors.ErrorPopup;
 
 public abstract class AbstractDMNDataManagementStrategy extends AbstractDataManagementStrategy {
 
@@ -105,10 +102,4 @@ public abstract class AbstractDMNDataManagementStrategy extends AbstractDataMana
         }
     }
 
-    protected ErrorCallback<Message> getErrorCallback() {
-        return (error, exception) -> {
-            ErrorPopup.showMessage(exception.getMessage());
-            return false;
-        };
-    }
 }

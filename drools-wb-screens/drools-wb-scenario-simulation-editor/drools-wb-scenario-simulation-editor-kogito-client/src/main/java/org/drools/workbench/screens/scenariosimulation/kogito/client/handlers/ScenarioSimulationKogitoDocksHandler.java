@@ -17,20 +17,17 @@ package org.drools.workbench.screens.scenariosimulation.kogito.client.handlers;
 
 import javax.enterprise.context.ApplicationScoped;
 
-import org.drools.workbench.screens.scenariosimulation.client.handlers.AbstractScenarioSimulationDocksHandler;
-
 /**
  * Docks handler for SCESIM Kogito version. No additional docks are added in Kogito, therefore it uses inherited docks
  * implemented in the Abstract class.
  */
 @ApplicationScoped
-public class ScenarioSimulationKogitoDocksHandler extends AbstractScenarioSimulationDocksHandler {
+public class ScenarioSimulationKogitoDocksHandler {
 
     /**
      * Test result dock is not implemented in Kogito version, then an <code>UnsupportedOperationException</code> is
      * thrown if method is called in this context.
      */
-    @Override
     public void expandTestResultsDock() {
         throw new UnsupportedOperationException();
     }
