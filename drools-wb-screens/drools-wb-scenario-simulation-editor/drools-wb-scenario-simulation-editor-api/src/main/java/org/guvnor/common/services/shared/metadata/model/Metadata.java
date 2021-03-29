@@ -22,7 +22,6 @@ import java.util.List;
 
 import org.jboss.errai.common.client.api.annotations.Portable;
 import org.uberfire.backend.vfs.Path;
-import org.uberfire.backend.vfs.impl.LockInfo;
 
 /**
  *
@@ -32,7 +31,6 @@ public class Metadata {
 
     private Path path;
     private Path realPath;
-    private LockInfo lockInfo;
 
     //git info
     private String checkinComment;
@@ -73,7 +71,6 @@ public class Metadata {
                     final String description,
                     final List<String> tags,
                     final List<DiscussionRecord> discussion,
-                    final LockInfo lockInfo,
                     final boolean generated) {
         this.path = path;
         this.realPath = realPath;
@@ -89,7 +86,6 @@ public class Metadata {
         this.description = description;
         this.tags = tags;
         this.discussion = discussion;
-        this.lockInfo = lockInfo;
         this.generated = generated;
     }
 
@@ -149,16 +145,8 @@ public class Metadata {
         return discussion;
     }
 
-    public LockInfo getLockInfo() {
-        return lockInfo;
-    }
-
     public boolean isGenerated() {
         return generated;
-    }
-
-    public void setLockInfo(LockInfo lockInfo) {
-        this.lockInfo = lockInfo;
     }
 
     public void setSubject(final String subject) {
@@ -248,9 +236,6 @@ public class Metadata {
             return false;
         }
         if (type != null ? !type.equals(metadata.type) : metadata.type != null) {
-            return false;
-        }
-        if (lockInfo != null ? !lockInfo.equals(metadata.lockInfo) : metadata.lockInfo != null) {
             return false;
         }
         if (generated != metadata.generated) {
