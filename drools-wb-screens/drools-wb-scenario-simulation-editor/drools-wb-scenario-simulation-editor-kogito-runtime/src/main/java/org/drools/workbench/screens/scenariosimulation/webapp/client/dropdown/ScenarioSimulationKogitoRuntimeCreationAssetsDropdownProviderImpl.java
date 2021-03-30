@@ -31,7 +31,7 @@ import org.jboss.errai.common.client.api.RemoteCallback;
 import org.kie.workbench.common.widgets.client.assets.dropdown.KieAssetsDropdownItem;
 import org.uberfire.backend.vfs.Path;
 
-import static org.drools.workbench.screens.scenariosimulation.webapp.client.editor.DMNDiagramEditorActivity.DMN_PATH;
+import static org.drools.workbench.screens.scenariosimulation.webapp.client.editor.ScenarioSimulationEditorActivity.DMN_PATH;
 
 @Dependent
 public class ScenarioSimulationKogitoRuntimeCreationAssetsDropdownProviderImpl implements ScenarioSimulationKogitoCreationAssetsDropdownProvider {

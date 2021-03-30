@@ -22,12 +22,12 @@
 
     <script>
         function newDiagram() {
-            window.frames.editorFrame.contentWindow.gwtEditorBeans.get("DMNDiagramEditor").get().setContent("","");
+            window.frames.editorFrame.contentWindow.gwtEditorBeans.get("ScenarioSimulationEditor").get().setContent("","");
         }
 
         function loadDiagram(diagram) {
             console.log('loadDiagram ' + diagram);
-            window.frames.editorFrame.contentWindow.gwtEditorBeans.get("DMNDiagramEditor").get().setContent('', diagram);
+            window.frames.editorFrame.contentWindow.gwtEditorBeans.get("ScenarioSimulationEditor").get().setContent('', diagram);
 
             //window.frames.editorFrame.contentWindow.loadFile();
             //document.getElementById("download_btn").disabled = false;
@@ -39,7 +39,7 @@
         }
 
         function download() {
-                window.frames.editorFrame.contentWindow.gwtEditorBeans.get("DMNDiagramEditor").get().getContent().then(
+                window.frames.editorFrame.contentWindow.gwtEditorBeans.get("ScenarioSimulationEditor").get().getContent().then(
                     function(p) {
                         var d = document.createElement('a');
                         d.setAttribute('href', 'data:text/xml;charset=utf-8,' + encodeURIComponent(p));

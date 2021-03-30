@@ -85,6 +85,15 @@
       <artifactId>uberfire-wires-core-grids</artifactId>
     </dependency>
 
+    <dependency>
+      <groupId>org.uberfire</groupId>
+      <artifactId>appformer-client-api</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.drools</groupId>
+      <artifactId>drools-wb-scenario-simulation-editor-api</artifactId>
+    </dependency>
+
     <!-- Lienzo -->
     <dependency>
       <groupId>org.kie</groupId>
@@ -121,11 +130,6 @@
       <artifactId>assertj-core</artifactId>
       <scope>test</scope>
     </dependency>
-    <dependency>
-      <groupId>org.uberfire</groupId>
-      <artifactId>appformer-client-api</artifactId>
-    </dependency>
-
   </dependencies>
 
 </project>

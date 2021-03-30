@@ -48,9 +48,9 @@ import org.uberfire.workbench.model.ActivityResourceType;
 import org.uberfire.workbench.model.bridge.Notification;
 
 @ApplicationScoped
-@Named(DMNDiagramEditorActivity.ID)
-public class DMNDiagramEditorActivity extends AbstractActivity implements EditorActivity {
-    public static final String ID = "DMNDiagramEditor";
+@Named(ScenarioSimulationEditorActivity.ID)
+public class ScenarioSimulationEditorActivity extends AbstractActivity implements EditorActivity {
+    public static final String ID = "ScenarioSimulationEditor";
 
     private static final String BASE_URI = "/asserts/";
     public static final String BASE_DMN_URI = BASE_URI + "dmn/";

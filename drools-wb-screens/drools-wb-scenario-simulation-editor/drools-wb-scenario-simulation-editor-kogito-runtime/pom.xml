@@ -310,11 +310,6 @@
       <artifactId>uberfire-wires-core-grids</artifactId>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>org.kie.workbench.widgets</groupId>
-      <artifactId>kie-wb-config-resource-widget</artifactId>
-      <scope>provided</scope>
-    </dependency>
 
     <dependency>
       <groupId>com.google.elemental2</groupId>
@@ -424,7 +419,7 @@
           <!--
                         <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
           -->
-          <runTarget>index.html</runTarget>
+          <runTarget>test.html</runTarget>
           <strict>true</strict>
           <style>PRETTY</style>
           <printJavaCommandOnError>false</printJavaCommandOnError>

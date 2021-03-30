@@ -40,6 +40,7 @@ import static org.drools.scenariosimulation.api.model.ScenarioSimulationModel.Ty
 import static org.drools.scenariosimulation.api.model.ScenarioSimulationModel.Type.RULE;
 
 @ApplicationScoped
+@Named(SettingsPresenter.IDENTIFIER)
 public class SettingsPresenter extends AbstractSubDockPresenter<SettingsView> implements SettingsView.Presenter {
 
     public static final int DEFAULT_PREFERRED_WIDHT = 300;
@@ -70,6 +71,11 @@ public class SettingsPresenter extends AbstractSubDockPresenter<SettingsView> im
         view.getSkipFromBuildLabel().setInnerText(ScenarioSimulationEditorConstants.INSTANCE.skipSimulation());
         view.setupDropdown(settingsScenarioSimulationDropdown.asWidget().asWidget().getElement());
         settingsScenarioSimulationDropdown.init();
+    }
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
     }
 
     @Override

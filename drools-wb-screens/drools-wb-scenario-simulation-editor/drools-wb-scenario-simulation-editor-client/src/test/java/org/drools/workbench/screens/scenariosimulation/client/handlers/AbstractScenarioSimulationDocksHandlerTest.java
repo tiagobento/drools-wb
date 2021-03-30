@@ -27,8 +27,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.kie.workbench.common.widgets.client.docks.AuthoringEditorDock;
 import org.mockito.Mock;
-import org.uberfire.client.mvp.PlaceManager;
-import org.uberfire.client.mvp.PlaceStatus;
 import org.uberfire.client.workbench.docks.UberfireDock;
 import org.uberfire.client.workbench.docks.UberfireDockPosition;
 import org.uberfire.mvp.PlaceRequest;
@@ -55,8 +53,6 @@ public class AbstractScenarioSimulationDocksHandlerTest {
     private TestToolsPresenter testToolsPresenterMock;
     @Mock
     private SettingsPresenter settingsPresenterMock;
-    @Mock
-    private PlaceManager placeManagerMock;
 
     private AbstractScenarioSimulationDocksHandler abstractScenarioSimulationDocksHandlerSpy;
 
@@ -72,7 +68,6 @@ public class AbstractScenarioSimulationDocksHandlerTest {
 
             {
                 this.authoringWorkbenchDocks = authoringWorkbenchDocksMock;
-                this.placeManager = placeManagerMock;
                 this.cheatSheetPresenter = cheatSheetPresenterMock;
                 this.settingsPresenter = settingsPresenterMock;
                 this.testToolsPresenter = testToolsPresenterMock;

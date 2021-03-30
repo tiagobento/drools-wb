@@ -27,6 +27,7 @@ import java.util.TreeMap;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import com.google.gwt.event.shared.EventBus;
 import org.drools.scenariosimulation.api.model.FactMappingValueType;
@@ -36,6 +37,7 @@ import org.drools.workbench.screens.scenariosimulation.client.resources.i18n.Sce
 import org.drools.workbench.screens.scenariosimulation.model.typedescriptor.FactModelTree;
 
 @ApplicationScoped
+@Named(TestToolsPresenter.IDENTIFIER)
 public class TestToolsPresenter extends AbstractSubDockPresenter<TestToolsView> implements TestToolsView.Presenter {
 
     public static final String IDENTIFIER = "org.drools.scenariosimulation.TestTools";
@@ -62,6 +64,11 @@ public class TestToolsPresenter extends AbstractSubDockPresenter<TestToolsView> 
         this.listGroupItemPresenter = listGroupItemPresenter;
         this.listGroupItemPresenter.init(this);
         title = ScenarioSimulationEditorConstants.INSTANCE.testTools();
+    }
+
+    @Override
+    public String getIdentifier() {
+        return IDENTIFIER;
     }
 
     @Override
