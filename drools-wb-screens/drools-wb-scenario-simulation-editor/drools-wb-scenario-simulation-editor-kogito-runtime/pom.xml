@@ -416,12 +416,8 @@
           <style>OBFUSCATED</style>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
-          <!--
-                        <server>org.jboss.errai.cdi.server.gwt.EmbeddedWildFlyLauncher</server>
-          -->
           <runTarget>test.html</runTarget>
           <strict>true</strict>
-          <style>PRETTY</style>
           <printJavaCommandOnError>false</printJavaCommandOnError>
           <productionMode>true</productionMode>
           <hostedWebapp>src/main/webapp</hostedWebapp>
