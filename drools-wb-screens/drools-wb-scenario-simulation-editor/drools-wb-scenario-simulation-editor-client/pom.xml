@@ -89,10 +89,6 @@
       <groupId>org.uberfire</groupId>
       <artifactId>appformer-client-api</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.drools</groupId>
-      <artifactId>drools-wb-scenario-simulation-editor-api</artifactId>
-    </dependency>
 
     <!-- Lienzo -->
     <dependency>
