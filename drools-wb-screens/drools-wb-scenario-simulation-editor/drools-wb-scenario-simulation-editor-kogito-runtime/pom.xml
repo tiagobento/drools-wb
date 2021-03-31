@@ -356,7 +356,7 @@
             <fileset>
               <directory>${basedir}</directory>
               <includes>
-                <include>src/main/webapp/org.drools.workbench.screens.scenariosimulation.webapp.DroolsWorkbenchScenarioSimulationEditorShowcase/</include>
+                <include>src/main/webapp/org.drools.workbench.screens.scenariosimulation.webapp.DroolsWorkbenchScenarioSimulationKogitoRuntime/</include>
                 <include>src/main/webapp/WEB-INF/deploy/</include>
                 <include>src/main/webapp/WEB-INF/classes/</include>
                 <include>src/main/webapp/WEB-INF/lib/</include>
