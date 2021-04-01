@@ -16,6 +16,7 @@
 
 package org.drools.workbench.screens.scenariosimulation.webapp.client.editor;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -84,7 +85,7 @@ public class ScenarioSimulationEditorActivity extends AbstractActivity implement
 
     @Override
     public Promise<List<Notification>> validate() {
-        return null;
+        return Promise.resolve(Collections.emptyList());;
     }
 
     @Override
