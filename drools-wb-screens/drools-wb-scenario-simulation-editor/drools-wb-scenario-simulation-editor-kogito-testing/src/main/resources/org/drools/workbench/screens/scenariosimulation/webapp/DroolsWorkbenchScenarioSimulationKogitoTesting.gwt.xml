@@ -20,6 +20,7 @@
 <module>
 
   <inherits name="org.uberfire.UberfireAPI" />
+  <inherits name="elemental2.webstorage.WebStorage"/>
 
   <inherits name="org.guvnor.common.services.GuvnorCommonServices" />
   <inherits name="org.drools.workbench.screens.scenariosimulation.DroolsWorkbenchScenarioSimulationEditorAPI"/>

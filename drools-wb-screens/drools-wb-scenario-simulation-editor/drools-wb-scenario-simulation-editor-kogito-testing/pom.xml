@@ -9,11 +9,11 @@
   </parent>
   <modelVersion>4.0.0</modelVersion>
 
-  <artifactId>drools-wb-scenario-simulation-editor-kogito-runtime</artifactId>
+  <artifactId>drools-wb-scenario-simulation-editor-kogito-testing</artifactId>
   <packaging>war</packaging>
 
-  <name>Drools Workbench - Scenario Simulation Editor - Kogito - Runtime Webapp</name>
-  <description>Drools Workbench - Scenario Simulation Editor - Kogito - Runtime Webapp</description>
+  <name>Drools Workbench - Scenario Simulation Editor - Kogito - Testing Webapp</name>
+  <description>Drools Workbench - Scenario Simulation Editor - Kogito - Testing Webapp</description>
 
   <properties>
     <wildfly.home>${project.build.directory}/wildfly-${version.org.wildfly}</wildfly.home>
@@ -311,6 +311,11 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>com.google.elemental2</groupId>
+      <artifactId>elemental2-webstorage</artifactId>
+    </dependency>
+
     <!-- MARSHALLING -->
     <dependency>
       <groupId>org.drools</groupId>
@@ -351,7 +356,7 @@
             <fileset>
               <directory>${basedir}</directory>
               <includes>
-                <include>src/main/webapp/org.drools.workbench.screens.scenariosimulation.webapp.DroolsWorkbenchScenarioSimulationKogitoRuntime/</include>
+                <include>src/main/webapp/org.drools.workbench.screens.scenariosimulation.webapp.DroolsWorkbenchScenarioSimulationKogitoTesting/</include>
                 <include>src/main/webapp/WEB-INF/deploy/</include>
                 <include>src/main/webapp/WEB-INF/classes/</include>
                 <include>src/main/webapp/WEB-INF/lib/</include>
@@ -405,13 +410,13 @@
         <configuration>
           <deploy>${project.build.directory}/gwt-symbols-deploy</deploy>
           <localWorkers>4</localWorkers>
-          <module>org.drools.workbench.screens.scenariosimulation.webapp.DroolsWorkbenchScenarioSimulationKogitoRuntime</module>
+          <module>org.drools.workbench.screens.scenariosimulation.webapp.DroolsWorkbenchScenarioSimulationKogitoTesting</module>
           <extraJvmArgs>-Xmx4096m -Xms1024m -Xss1M -XX:CompileThreshold=7000 -Derrai.dynamic_validation.enabled=true</extraJvmArgs>
           <optimizationLevel>9</optimizationLevel>
           <style>OBFUSCATED</style>
           <logLevel>INFO</logLevel>
           <noServer>false</noServer>
-          <runTarget>index.html</runTarget>
+          <runTarget>test.html</runTarget>
           <strict>true</strict>
           <printJavaCommandOnError>false</printJavaCommandOnError>
           <productionMode>true</productionMode>
