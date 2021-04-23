@@ -17,13 +17,12 @@
 package org.drools.workbench.screens.scenariosimulation.kogito.client.editor;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.function.Supplier;
 
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.PopupPanel;
 import elemental2.dom.CSSProperties;
@@ -69,8 +68,6 @@ import org.drools.workbench.screens.scenariosimulation.kogito.client.services.Sc
 import org.drools.workbench.screens.scenariosimulation.model.SimulationRunResult;
 import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
-import org.jboss.errai.ioc.client.container.SyncBeanDef;
-import org.jboss.errai.ioc.client.container.SyncBeanManager;
 import org.jboss.errai.ui.client.local.spi.TranslationService;
 import org.kie.workbench.common.dmn.webapp.kogito.marshaller.js.model.dmn12.JSITDefinitions;
 import org.kie.workbench.common.kogito.client.editor.MultiPageEditorContainerPresenter;
@@ -80,7 +77,6 @@ import org.uberfire.backend.vfs.Path;
 import org.uberfire.backend.vfs.PathFactory;
 import org.uberfire.backend.vfs.impl.ObservablePathImpl;
 import org.uberfire.client.callbacks.Callback;
-import org.uberfire.client.mvp.Activity;
 import org.uberfire.client.promise.Promises;
 import org.uberfire.client.views.pfly.multipage.PageImpl;
 import org.uberfire.mvp.Command;
@@ -142,13 +138,22 @@ public class ScenarioSimulationEditorKogitoWrapper extends MultiPageEditorContai
         this.scenarioSimulationKogitoCreationPopupPresenter = scenarioSimulationKogitoCreationPopupPresenter;
         this.scenarioSimulationKogitoDocksHandler = scenarioSimulationKogitoDocksHandler;
         this.scenarioSimulationKogitoDMNMarshallerService = scenarioSimulationKogitoDMNMarshallerService;
+    }
 
+    @PostConstruct
+    public void init() {
         HTMLCollection<Element> elements = DomGlobal.document.getElementsByClassName("tab-content");
+
         if(elements.length == 1) {
             HTMLDivElement element = (HTMLDivElement) elements.getAt(0);
             HTMLTableElement header = (HTMLTableElement) element.parentElement.firstElementChild;
             element.style.height = CSSProperties.HeightUnionType.of("calc(100% - " + header.clientHeight +"px)");
         }
+
+        DomGlobal.window.addEventListener("resize", evt -> scenarioSimulationEditorPresenter.getView()
+                .onResize());
+        scenarioSimulationEditorPresenter.getView().onResize();
+
     }
 
     @Override
